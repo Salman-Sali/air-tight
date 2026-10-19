@@ -10,7 +10,9 @@ members = [
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
-license = "MIT OR Apache-2.0"
+license = "MIT"
+authors = ["Salman-Sali"]
+repository = "https://github.com/Salman-Sali/air-tight"
 
 [workspace.dependencies]
 axum = "0.8"
@@ -26,6 +28,6 @@ thiserror = "2"
 serde_json = "1"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 tracing = "0.1"
-air-tight-core = { path = "crates/air-tight-core" }
-air-tight-macros = { path = "crates/air-tight-macros" }
-air-tight = { path = "crates/air-tight" }
+air-tight-core = { path = "crates/air-tight-core", version = "0.1.0" }
+air-tight-macros = { path = "crates/air-tight-macros", version = "0.1.0" }
+air-tight = { path = "crates/air-tight", version = "0.1.0" }

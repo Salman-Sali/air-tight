@@ -1,0 +1,18 @@
+// Publishes the workspace crates to crates.io in dependency order.
+// Each publish waits for the crate to appear in the index before the next one starts.
+
+fun publish(crate_name) {
+    echo "Publishing {crate_name}...";
+    $ cargo publish -p {crate_name} $ failed {
+        echo "Error while publishing '{crate_name}'. Stopping.";
+        exit 1;
+    }
+    echo "Published {crate_name}.";
+}
+
+main {
+    publish("air-tight-core");
+    publish("air-tight-macros");
+    publish("air-tight");
+    echo "All crates published.";
+}

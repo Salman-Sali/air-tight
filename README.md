@@ -170,4 +170,4 @@ Without the variable the database tests are skipped.
 
 ## License
 
-MIT OR Apache-2.0.
+MIT. See [LICENSE](LICENSE).
