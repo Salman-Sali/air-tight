@@ -1,8 +1,19 @@
 [package]
 name = "axum-diesel-app"
-version = "0.1.0"
+description = "Example axum + diesel application protected with air-tight"
+version.workspace = true
 edition.workspace = true
 publish = false
 
 [dependencies]
 air-tight.workspace = true
+axum.workspace = true
+diesel.workspace = true
+diesel_migrations = { version = "2.2", features = ["postgres"] }
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["net"] }
+uuid.workspace = true
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }

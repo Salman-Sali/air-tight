@@ -4,6 +4,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      # Used by the test suites (AIR_TIGHT_TEST_DATABASE_URL).
       POSTGRES_DB: air_tight_test
     ports:
       - "55432:5432"
+    volumes:
+      # Also creates `air_tight_example` for examples/axum-diesel-app.
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
