@@ -76,6 +76,28 @@ impl GrantSet {
         self.scoped.get(&(kind_id, Arc::from(id))).is_some_and(held)
     }
 
+    /// Sorted ids of the scoped entries of `kind` that allow `key`.
+    ///
+    /// Uses the same matching as [`GrantSet::allows`], so wildcards count.
+    /// Global grants are not consulted; check `allows(key, None)` first.
+    pub(crate) fn scoped_ids_allowing(
+        &self,
+        key: &PermissionKey,
+        kind: &ResourceKindKey,
+    ) -> Vec<String> {
+        let Some(kind_id) = Interner::global().kind_id(kind.as_str()) else {
+            return Vec::new();
+        };
+        let mut ids: Vec<String> = self
+            .scoped
+            .keys()
+            .filter(|(k, id)| *k == kind_id && self.allows(key, Some((kind, id))))
+            .map(|(_, id)| id.to_string())
+            .collect();
+        ids.sort();
+        ids
+    }
+
     /// Approximate heap size in bytes, for cache weighing.
     pub fn approx_bytes(&self) -> u32 {
         let key = size_of::<KeyId>();

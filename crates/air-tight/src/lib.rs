@@ -3,7 +3,11 @@
 
 #[doc(hidden)]
 pub mod __private;
+mod access;
+mod accessible;
 mod air_tight;
+mod air_tight_path;
+mod air_tight_query;
 mod audit_action;
 mod audit_entry;
 mod audit_routes;
@@ -25,6 +29,7 @@ mod interner;
 mod invalidation;
 mod key_id;
 mod kind_id;
+mod list_filtering;
 mod listener;
 mod load_grant_set;
 mod manage_grants;
@@ -49,11 +54,15 @@ mod setup;
 mod sync_catalog;
 mod validate_key;
 
+pub use access::Access;
+pub use accessible::Accessible;
 pub use air_tight::AirTight;
 pub use air_tight_core::*;
 pub use air_tight_macros::{
     IdentifyResources, Permission, PermissionCategory, ResourceKind, permission, unrestricted,
 };
+pub use air_tight_path::AirTightPath;
+pub use air_tight_query::AirTightQuery;
 pub use builder::Builder;
 pub use catalog_sync_report::CatalogSyncReport;
 pub use current_user::CurrentUser;

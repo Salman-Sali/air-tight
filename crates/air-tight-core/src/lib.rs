@@ -14,6 +14,7 @@ mod resource_ids;
 mod resource_kind;
 mod resource_kind_key;
 mod resource_kind_marker;
+mod resource_kinds;
 mod resource_scope;
 mod wildcard;
 
@@ -32,5 +33,6 @@ pub use resource_ids::ResourceIds;
 pub use resource_kind::ResourceKind;
 pub use resource_kind_key::ResourceKindKey;
 pub use resource_kind_marker::ResourceKindMarker;
+pub use resource_kinds::ResourceKinds;
 pub use resource_scope::ResourceScope;
 pub use wildcard::{grant_matches, is_well_formed_wildcard};
