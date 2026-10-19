@@ -1,0 +1,11 @@
+error[E0277]: the trait bound `NotAMarker: ResourceKindMarker` is not satisfied
+  --> tests/ui/category_bad_resource.rs:12:28
+   |
+12 |     #[air_tight(resource = NotAMarker)]
+   |                            ^^^^^^^^^^ unsatisfied trait bound
+   |
+help: the trait `ResourceKindMarker` is not implemented for `NotAMarker`
+  --> tests/ui/category_bad_resource.rs:8:1
+   |
+ 8 | struct NotAMarker;
+   | ^^^^^^^^^^^^^^^^^

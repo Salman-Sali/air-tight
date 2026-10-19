@@ -1,0 +1,5 @@
+error: #[derive(Permission)] can only be used on enums
+ --> tests/ui/permission_struct.rs:4:8
+  |
+4 | struct Action;
+  |        ^^^^^^

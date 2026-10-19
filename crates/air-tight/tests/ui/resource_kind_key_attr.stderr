@@ -1,0 +1,5 @@
+error: air_tight attributes are not supported on resource kind variants (the key is the variant name)
+ --> tests/ui/resource_kind_key_attr.rs:5:5
+  |
+5 |     #[air_tight(key = "Ws")]
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^

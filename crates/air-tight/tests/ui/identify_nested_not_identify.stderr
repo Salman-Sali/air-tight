@@ -1,0 +1,20 @@
+error[E0277]: the trait bound `u8: IdentifyResources` is not satisfied
+ --> tests/ui/identify_nested_not_identify.rs:6:12
+  |
+6 |     inner: u8,
+  |            ^^ the trait `IdentifyResources` is not implemented for `u8`
+  |
+help: the following other types implement trait `IdentifyResources`
+ --> tests/ui/identify_nested_not_identify.rs:3:10
+  |
+3 | #[derive(IdentifyResources)]
+  |          ^^^^^^^^^^^^^^^^^ `Body`
+  |
+ ::: $WORKSPACE/crates/air-tight-core/src/identify_resources.rs
+  |
+  | impl<T: IdentifyResources> IdentifyResources for Option<T> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Option<T>`
+...
+  | impl<T: IdentifyResources> IdentifyResources for Vec<T> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Vec<T>`
+  = note: this error originates in the derive macro `IdentifyResources` (in Nightly builds, run with -Z macro-backtrace for more info)

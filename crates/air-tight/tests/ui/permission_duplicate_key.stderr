@@ -1,0 +1,5 @@
+error: duplicate action key `Read` (also used by `Read`)
+ --> tests/ui/permission_duplicate_key.rs:7:5
+  |
+7 |     View,
+  |     ^^^^

@@ -1,0 +1,5 @@
+error: #[derive(PermissionCategory)] requires tuple variants with exactly one field whose type derives Permission, e.g. `Billing(MyAction)`
+  --> tests/ui/category_unit_variant.rs:11:5
+   |
+11 |     Billing,
+   |     ^^^^^^^

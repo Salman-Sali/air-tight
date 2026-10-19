@@ -1,0 +1,5 @@
+error: key override must be a non-empty segment without `::`, `*` or whitespace
+ --> tests/ui/permission_bad_key.rs:5:23
+  |
+5 |     #[air_tight(key = "A::B")]
+  |                       ^^^^^^

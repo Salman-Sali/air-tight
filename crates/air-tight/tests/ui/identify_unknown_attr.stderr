@@ -1,0 +1,5 @@
+error: unknown air_tight argument here; expected one of: `resource = Kind`, `nested`
+ --> tests/ui/identify_unknown_attr.rs:5:17
+  |
+5 |     #[air_tight(id)]
+  |                 ^^

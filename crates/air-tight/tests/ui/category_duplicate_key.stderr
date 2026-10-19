@@ -1,0 +1,5 @@
+error: duplicate category key `Workspace` (also used by `Workspace`)
+  --> tests/ui/category_duplicate_key.rs:12:5
+   |
+12 |     Other(Action),
+   |     ^^^^^

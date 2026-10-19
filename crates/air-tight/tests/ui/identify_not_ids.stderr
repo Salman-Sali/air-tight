@@ -1,0 +1,21 @@
+error[E0277]: the trait bound `Opaque: ResourceIds` is not satisfied
+  --> tests/ui/identify_not_ids.rs:15:9
+   |
+15 |     id: Opaque,
+   |         ^^^^^^ unsatisfied trait bound
+   |
+help: the trait `ResourceIds` is not implemented for `Opaque`
+  --> tests/ui/identify_not_ids.rs:10:1
+   |
+10 | struct Opaque;
+   | ^^^^^^^^^^^^^
+   = help: the following other types implement trait `ResourceIds`:
+             &[T]
+             &str
+             HashSet<T, S>
+             Option<T>
+             String
+             Vec<T>
+             char
+             i128
+           and $N others

@@ -1,0 +1,5 @@
+error: #[derive(Permission)] does not support generic parameters
+ --> tests/ui/permission_generic.rs:4:12
+  |
+4 | enum Action<T> {
+  |            ^^^

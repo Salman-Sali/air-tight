@@ -1,0 +1,5 @@
+error: #[derive(ResourceKind)] supports unit variants only; `Invoice` has fields
+ --> tests/ui/resource_kind_non_unit.rs:6:5
+  |
+6 |     Invoice { id: u8 },
+  |     ^^^^^^^^^^^^^^^^^^

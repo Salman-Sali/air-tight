@@ -1,0 +1,5 @@
+error: #[derive(PermissionCategory)] requires tuple variants with exactly one field whose type derives Permission, e.g. `Workspace(MyAction)`
+  --> tests/ui/category_two_fields.rs:10:5
+   |
+10 |     Workspace(Action, Action),
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^

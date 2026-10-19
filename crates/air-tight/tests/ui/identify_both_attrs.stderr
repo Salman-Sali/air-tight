@@ -1,0 +1,13 @@
+error: a field cannot be both `resource = ...` and `nested`
+  --> tests/ui/identify_both_attrs.rs:12:39
+   |
+12 |     #[air_tight(resource = Workspace, nested)]
+   |                                       ^^^^^^
+
+warning: unused import: `kinds_kinds::Workspace`
+ --> tests/ui/identify_both_attrs.rs:8:5
+  |
+8 | use kinds_kinds::Workspace;
+  |     ^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
