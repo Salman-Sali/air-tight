@@ -1,0 +1,19 @@
+[package]
+name = "air-tight"
+description = "Authorization for axum with Postgres-backed grants"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+air-tight-core.workspace = true
+air-tight-macros.workspace = true
+axum.workspace = true
+diesel.workspace = true
+moka.workspace = true
+inventory.workspace = true
+serde.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true

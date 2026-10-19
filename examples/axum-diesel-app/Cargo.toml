@@ -1,0 +1,8 @@
+[package]
+name = "axum-diesel-app"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+
+[dependencies]
+air-tight.workspace = true

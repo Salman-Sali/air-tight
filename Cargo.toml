@@ -1,0 +1,30 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/air-tight-core",
+    "crates/air-tight-macros",
+    "crates/air-tight",
+    "examples/axum-diesel-app",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+axum = "0.8"
+diesel = { version = "2.2", features = ["postgres", "r2d2", "uuid", "serde_json", "chrono"] }
+moka = { version = "0.12", features = ["sync"] }
+syn = { version = "2", features = ["full"] }
+quote = "1"
+proc-macro2 = "1"
+inventory = "0.3"
+serde = { version = "1", features = ["derive"] }
+uuid = { version = "1", features = ["serde", "v4"] }
+thiserror = "2"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+tracing = "0.1"
+air-tight-core = { path = "crates/air-tight-core" }
+air-tight-macros = { path = "crates/air-tight-macros" }
+air-tight = { path = "crates/air-tight" }
