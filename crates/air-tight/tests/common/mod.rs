@@ -19,3 +19,15 @@ pub fn connect() -> Option<PgConnection> {
 pub fn unique(prefix: &str) -> String {
     format!("{prefix}-{}", uuid::Uuid::new_v4())
 }
+
+/// A small r2d2 pool on the test database, or `None` to skip.
+pub fn pool() -> Option<air_tight::PgPool> {
+    let url = std::env::var("AIR_TIGHT_TEST_DATABASE_URL").ok()?;
+    let manager = diesel::r2d2::ConnectionManager::<PgConnection>::new(url);
+    Some(
+        diesel::r2d2::Pool::builder()
+            .max_size(4)
+            .build(manager)
+            .expect("build test pool"),
+    )
+}

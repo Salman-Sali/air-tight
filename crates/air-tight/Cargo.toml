@@ -21,3 +21,4 @@ tracing.workspace = true
 
 [dev-dependencies]
 trybuild = "1"
+tokio = { workspace = true, features = ["time", "rt", "rt-multi-thread", "macros"] }

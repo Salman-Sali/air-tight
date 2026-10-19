@@ -39,6 +39,13 @@ impl Error {
     }
 }
 
+impl From<diesel::r2d2::PoolError> for Error {
+    fn from(err: diesel::r2d2::PoolError) -> Self {
+        tracing::error!(error = %err, "could not get a database connection");
+        Error::Pool
+    }
+}
+
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
         let status = match self {
