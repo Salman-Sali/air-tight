@@ -5,6 +5,8 @@ use crate::{Error, GrantSet, Interner};
 
 type Row = (String, Option<String>, Option<String>);
 
+// TODO(v2:role-hierarchy): role inheritance via role_parents and recursive flatten at cache load.
+
 /// Loads the flattened grants of `user_id` using exactly two queries.
 ///
 /// The first reads direct grants from `user_permissions`; the second joins

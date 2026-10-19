@@ -4,7 +4,9 @@ use std::time::Duration;
 
 use air_tight_core::{PermissionCategory, Principal, ResourceKind};
 
+use crate::generations::Generations;
 use crate::inner::Inner;
+use crate::listener;
 use crate::{
     AirTight, Error, GrantCache, MokaGrantCache, NoKinds, NotifyChannel, PgPool, run_migrations,
     sync_catalog,
@@ -97,7 +99,12 @@ impl<P: PermissionCategory, U: Principal, R> Builder<P, U, R> {
 }
 
 impl<P: PermissionCategory, U: Principal, R: ResourceKind> Builder<P, U, R> {
-    /// Migrates the database, syncs the permission catalog and returns the client.
+    /// Migrates the database, syncs the permission catalog, starts the
+    /// LISTEN/NOTIFY listener thread and returns the client.
+    ///
+    /// The listener keeps one pool connection for its whole life, so the pool
+    /// needs at least two connections. `build` waits briefly for the listener
+    /// to be subscribed, so changes made after it returns are not missed.
     ///
     /// Only available after `.resource_kinds::<R>()`.
     pub fn build(self) -> Result<AirTight<P, U>, Error> {
@@ -110,13 +117,14 @@ impl<P: PermissionCategory, U: Principal, R: ResourceKind> Builder<P, U, R> {
             run_migrations(&mut conn)?;
             sync_catalog::<P, R>(&mut conn)?;
         }
-        let client = AirTight::from_inner(Arc::new(Inner {
+        let inner = Arc::new(Inner {
             pool: self.pool,
             cache,
             channel,
             sync: sync_catalog::<P, R>,
-        }));
-        client.start_listener();
-        Ok(client)
+            generations: Generations::new(),
+        });
+        listener::spawn(&inner)?;
+        Ok(AirTight::from_inner(inner))
     }
 }

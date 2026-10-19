@@ -7,7 +7,7 @@ use tokio::runtime::{Handle, RuntimeFlavor};
 use crate::builder::Builder;
 use crate::evaluate::ensure;
 use crate::inner::Inner;
-use crate::{CatalogSyncReport, Error, GrantSet, Granted, NoKinds, PgPool, load_grant_set};
+use crate::{CatalogSyncReport, Error, GrantSet, Granted, NoKinds, PgPool};
 
 /// The authorization client: a database pool, a grant cache and the check API.
 ///
@@ -44,7 +44,7 @@ use crate::{CatalogSyncReport, Error, GrantSet, Granted, NoKinds, PgPool, load_g
 /// answering 401 is the job of the extractor that supplies the `&U` (added in
 /// a later phase). `authorize` only ever sees a principal.
 pub struct AirTight<P: PermissionCategory, U: Principal> {
-    inner: Arc<Inner>,
+    pub(crate) inner: Arc<Inner>,
     _types: PhantomData<fn() -> (P, U)>,
 }
 
@@ -92,7 +92,7 @@ impl<P: PermissionCategory, U: Principal> AirTight<P, U> {
     pub fn grant_set(&self, user_id: &str) -> Result<Arc<GrantSet>, Error> {
         match self.inner.cache.get(user_id) {
             Some(set) => Ok(set),
-            None => self.load_and_cache(user_id),
+            None => self.inner.load_and_cache(user_id),
         }
     }
 
@@ -145,12 +145,12 @@ impl<P: PermissionCategory, U: Principal> AirTight<P, U> {
 
     /// Drops the cached grants of `user_id`; the next check reloads them.
     pub fn invalidate_user(&self, user_id: &str) {
-        self.inner.cache.invalidate(user_id);
+        self.inner.invalidate_user(user_id);
     }
 
     /// Drops every cached grant set.
     pub fn invalidate_all(&self) {
-        self.inner.cache.invalidate_all();
+        self.inner.invalidate_all();
     }
 
     fn finish(
@@ -163,38 +163,21 @@ impl<P: PermissionCategory, U: Principal> AirTight<P, U> {
         Ok(Granted::new(user_id, scopes, set))
     }
 
-    fn load_and_cache(&self, user_id: &str) -> Result<Arc<GrantSet>, Error> {
-        let mut conn = self.inner.pool.get()?;
-        let set = Arc::new(load_grant_set(&mut conn, user_id)?);
-        self.inner
-            .cache
-            .insert(user_id.to_owned(), Arc::clone(&set));
-        Ok(set)
-    }
-
     async fn load_async(&self, user_id: String) -> Result<Arc<GrantSet>, Error> {
         match Handle::try_current() {
             Ok(handle) if handle.runtime_flavor() == RuntimeFlavor::MultiThread => {
-                tokio::task::block_in_place(|| self.load_and_cache(&user_id))
+                tokio::task::block_in_place(|| self.inner.load_and_cache(&user_id))
             }
             Ok(_) => {
                 let this = self.clone();
-                tokio::task::spawn_blocking(move || this.load_and_cache(&user_id))
+                tokio::task::spawn_blocking(move || this.inner.load_and_cache(&user_id))
                     .await
                     .map_err(|err| {
                         tracing::error!(error = %err, "grant loading task failed");
                         Error::Pool
                     })?
             }
-            Err(_) => self.load_and_cache(&user_id),
+            Err(_) => self.inner.load_and_cache(&user_id),
         }
-    }
-
-    /// Spot where Phase 5 starts the LISTEN/NOTIFY thread on `inner.channel`.
-    ///
-    /// Intentionally a no-op for now.
-    // TODO(phase 5): spawn the listener thread, invalidating the cache from notifications.
-    pub(crate) fn start_listener(&self) {
-        let _ = &self.inner.channel;
     }
 }
