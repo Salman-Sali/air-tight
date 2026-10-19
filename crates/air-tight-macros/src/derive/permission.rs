@@ -55,8 +55,22 @@ pub(crate) fn expand(input: &DeriveInput) -> syn::Result<TokenStream> {
 
     let name = &input.ident;
     let std_impls = util::unit_enum_std_impls(name, &idents);
+    let variant_names: Vec<String> = idents.iter().map(|i| i.to_string()).collect();
     Ok(quote! {
         #std_impls
+        impl #name {
+            /// Looks up an action by its Rust variant name in `const` context.
+            /// Generated for `#[air_tight::permission(...)]`; not public API.
+            #[doc(hidden)]
+            pub const fn __air_tight_variant(name: &str) -> ::core::option::Option<Self> {
+                #(
+                    if ::air_tight::const_str_eq(name, #variant_names) {
+                        return ::core::option::Option::Some(Self::#idents);
+                    }
+                )*
+                ::core::option::Option::None
+            }
+        }
         impl ::air_tight::Permission for #name {
             fn action_name(&self) -> &'static str {
                 match self { #(Self::#idents => #names,)* }

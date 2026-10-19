@@ -1,0 +1,5 @@
+error: `error = response` is not supported with `kind = fn`; return a `Result` whose error implements `From<air_tight::Error>`
+  --> tests/ui/attr_fn_error_response.rs:30:61
+   |
+30 | #[air_tight::permission(Workspace(Read), kind = fn, error = response)]
+   |                                                             ^^^^^^^^

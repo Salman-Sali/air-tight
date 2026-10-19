@@ -1,0 +1,5 @@
+error[E0080]: evaluation panicked: air_tight: `Workspace(Raed)` is not a permission: no category variant `Workspace` wrapping an action variant `Raed`
+  --> tests/ui/attr_unknown_permission.rs:30:25
+   |
+30 | #[air_tight::permission(Workspace(Raed))]
+   |                         ^^^^^^^^^ evaluation of `__AIR_TIGHT_CONDITION_HANDLER` failed here

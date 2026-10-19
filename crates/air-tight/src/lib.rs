@@ -1,11 +1,15 @@
 //! Runtime crate for air-tight. Re-exports the core types and the macros.
 #![deny(missing_docs)]
 
+#[doc(hidden)]
+pub mod __private;
 mod air_tight;
 mod audit_action;
 mod audit_entry;
+mod audit_routes;
 mod builder;
 mod catalog_sync_report;
+mod current_user;
 mod error;
 mod evaluate;
 mod generations;
@@ -33,19 +37,26 @@ mod no_kinds;
 mod notify_channel;
 mod permission_info;
 mod pg_pool;
+pub mod registry;
 mod role_id;
 mod role_info;
 mod role_name;
+pub mod router;
+pub mod routing;
 #[allow(missing_docs)]
 pub mod schema;
+mod setup;
 mod sync_catalog;
 mod validate_key;
 
 pub use air_tight::AirTight;
 pub use air_tight_core::*;
-pub use air_tight_macros::{IdentifyResources, Permission, PermissionCategory, ResourceKind};
+pub use air_tight_macros::{
+    IdentifyResources, Permission, PermissionCategory, ResourceKind, permission, unrestricted,
+};
 pub use builder::Builder;
 pub use catalog_sync_report::CatalogSyncReport;
+pub use current_user::CurrentUser;
 pub use error::Error;
 pub use evaluate::evaluate;
 pub use grant_cache::GrantCache;
@@ -67,4 +78,5 @@ pub use pg_pool::PgPool;
 pub use role_id::RoleId;
 pub use role_info::RoleInfo;
 pub use role_name::RoleName;
+pub use router::{Guarded, Public, Router};
 pub use sync_catalog::sync_catalog;

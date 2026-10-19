@@ -8,8 +8,12 @@
 use proc_macro::TokenStream;
 use syn::{DeriveInput, parse_macro_input};
 
+mod attribute;
 mod attrs;
+mod condition;
 mod derive;
+#[cfg(test)]
+mod snapshots;
 mod util;
 
 fn finish(result: syn::Result<proc_macro2::TokenStream>) -> TokenStream {
@@ -61,4 +65,42 @@ pub fn derive_resource_kind(input: TokenStream) -> TokenStream {
 pub fn derive_identify_resources(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
     finish(derive::identify_resources::expand(&input))
+}
+
+/// Protects an axum handler (default) or any function (`kind = fn`) with a
+/// permission condition.
+///
+/// ```ignore
+/// #[air_tight::permission(Workspace(Update) && Invoice(Create), resources = [body])]
+/// async fn create_invoice(Json(body): Json<CreateInvoice>) -> Result<Json<Invoice>, AppError> { .. }
+/// ```
+///
+/// Grammar: `Category(Action)`, `Category(Read && (Update || Delete))`,
+/// `all(..)`, `any(..)`, `&&`, `||`, `!` (lacks), parentheses.
+///
+/// Arguments after the condition:
+/// - `resources = [a, b]`: parameter bindings implementing
+///   `IdentifyResources` (plain `a` or one-level `Json(a)`). Parameters typed
+///   `AirTightPath<..>` / `AirTightQuery<..>` are included automatically.
+/// - `kind = fn`: function mode; injects `__air_tight: &AirTight<Perms, User>`,
+///   `__air_tight_user: &User`, `__air_tight_scopes: Vec<ResourceScope>`.
+/// - `error = result | response`: override return type detection.
+/// - `state = name`, `user = name`: use your own parameters instead of the
+///   injected `State<AirTight<..>>` and `CurrentUser<User>`.
+///
+/// In handler mode the function name becomes a factory for the typed router
+/// (`air_tight::routing::get(name)`), the body runs in a hidden function,
+/// and a `granted: Granted<Perms>` binding is available in the body.
+/// Requires `air_tight::setup!` in the crate root.
+#[proc_macro_attribute]
+pub fn permission(args: TokenStream, item: TokenStream) -> TokenStream {
+    finish(attribute::expand_permission(args.into(), item.into()))
+}
+
+/// Marks an axum handler as public (no permission) so the typed router
+/// accepts it. Route it with `air_tight::routing::get(name)`.
+#[proc_macro_attribute]
+pub fn unrestricted(args: TokenStream, item: TokenStream) -> TokenStream {
+    let func = parse_macro_input!(item as syn::ItemFn);
+    finish(attribute::expand_unrestricted(args.into(), func))
 }

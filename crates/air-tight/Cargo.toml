@@ -18,7 +18,10 @@ uuid.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
 tracing.workspace = true
+tower = "0.5"
 
 [dev-dependencies]
 trybuild = "1"
+tower = { version = "0.5", features = ["util"] }
+prettyplease = "0.2"
 tokio = { workspace = true, features = ["time", "rt", "rt-multi-thread", "macros"] }

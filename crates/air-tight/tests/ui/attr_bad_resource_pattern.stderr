@@ -1,0 +1,5 @@
+error: `id` must be bound to a plain name to be used as a resource: write `id: Type` or a one-level wrapper like `Json(id): Json<Type>`
+  --> tests/ui/attr_bad_resource_pattern.rs:35:55
+   |
+35 | #[air_tight::permission(Workspace(Read), resources = [id])]
+   |                                                       ^^

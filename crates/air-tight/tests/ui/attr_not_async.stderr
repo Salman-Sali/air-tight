@@ -1,0 +1,5 @@
+error: #[air_tight::permission] handlers must be `async fn`; use `kind = fn` for other functions
+  --> tests/ui/attr_not_async.rs:31:1
+   |
+31 | fn handler() -> &'static str {
+   | ^^

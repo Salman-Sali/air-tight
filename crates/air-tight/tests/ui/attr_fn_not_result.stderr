@@ -1,0 +1,5 @@
+error: `kind = fn` requires a `Result<_, E>` return type where `E: From<air_tight::Error>` (or `error = result`)
+  --> tests/ui/attr_fn_not_result.rs:31:1
+   |
+31 | fn service() -> u32 {
+   | ^^^^^^^^^^^^^^^^^^^

@@ -1,0 +1,7 @@
+error[E0433]: cannot find `__air_tight` in the crate root
+ --> tests/ui/attr_missing_setup.rs:1:1
+  |
+1 | #[air_tight::permission(Workspace(Read))]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find `__air_tight` in the crate root
+  |
+  = note: this error originates in the attribute macro `air_tight::permission` (in Nightly builds, run with -Z macro-backtrace for more info)

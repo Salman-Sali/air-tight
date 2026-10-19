@@ -1,0 +1,32 @@
+error[E0277]: `impl Future<Output = &'static str>` is not a guarded or public handler
+  --> tests/ui/attr_plain_handler_in_router.rs:35:55
+   |
+35 |     let _ = air_tight::Router::<()>::new().route("/", air_tight::routing::get(plain));
+   |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ plain axum handlers cannot be routed by the air_tight router
+   |
+   = help: the trait `RouteTarget<_, _>` is not implemented for `impl Future<Output = &'static str>`
+   = note: annotate the handler with `#[air_tight::permission(...)]` or `#[air_tight::unrestricted]`
+help: the following other types implement trait `RouteTarget<T, S>`
+  --> src/router/route_target.rs
+   |
+   | impl<H: Handler<T, S>, T, S> RouteTarget<T, S> for Guarded<H> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Guarded<H>`
+...
+   | impl<H: Handler<T, S>, T, S> RouteTarget<T, S> for Public<H> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `air_tight::Public<H>`
+note: required by a bound in `air_tight::routing::get`
+  --> src/routing/mod.rs
+   |
+   |               R: RouteTarget<T, S>,
+   |                  ^^^^^^^^^^^^^^^^^ required by this bound in `get`
+...
+   | / top_level!(
+   | |     get => GET,
+   | |     --- required by a bound in this function
+   | |     post => POST,
+   | |     put => PUT,
+...  |
+   | |     trace => TRACE,
+   | | );
+   | |_- in this macro invocation
+   = note: this error originates in the macro `top_level` (in Nightly builds, run with -Z macro-backtrace for more info)

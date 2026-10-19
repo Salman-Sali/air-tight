@@ -4,6 +4,7 @@
 #![deny(missing_docs)]
 
 mod condition;
+mod const_str_eq;
 mod identify_resources;
 mod permission;
 mod permission_category;
@@ -20,6 +21,8 @@ mod wildcard;
 mod test_support;
 
 pub use condition::{Condition, Leaf};
+#[doc(hidden)]
+pub use const_str_eq::const_str_eq;
 pub use identify_resources::IdentifyResources;
 pub use permission::Permission;
 pub use permission_category::PermissionCategory;

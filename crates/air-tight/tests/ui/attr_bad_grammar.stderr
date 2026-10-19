@@ -1,0 +1,5 @@
+error: expected `,` then `resources = [..]`, `kind = fn`, `error = result|response`, `state = name` or `user = name`; combine conditions with `&&`, `||`, `all(..)`, `any(..)`
+  --> tests/ui/attr_bad_grammar.rs:30:41
+   |
+30 | #[air_tight::permission(Workspace(Read) Workspace(Read))]
+   |                                         ^^^^^^^^^

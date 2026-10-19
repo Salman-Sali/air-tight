@@ -73,6 +73,7 @@ pub(crate) fn expand(input: &DeriveInput) -> syn::Result<TokenStream> {
     let idents: Vec<_> = cats.iter().map(|c| c.ident).collect();
     let names: Vec<_> = cats.iter().map(|c| c.name.as_str()).collect();
     let tys: Vec<_> = cats.iter().map(|c| c.action_ty).collect();
+    let variant_names: Vec<String> = idents.iter().map(|i| i.to_string()).collect();
 
     let asserts = tys.iter().map(|ty| {
         quote_spanned! {ty.span()=>
@@ -123,6 +124,27 @@ pub(crate) fn expand(input: &DeriveInput) -> syn::Result<TokenStream> {
                 match self {
                     #(Self::#idents(a) => f.debug_tuple(stringify!(#idents)).field(a).finish(),)*
                 }
+            }
+        }
+
+        impl #name {
+            /// Looks up a permission by Rust variant names (category, action)
+            /// in `const` context. Generated for `#[air_tight::permission(...)]`;
+            /// not public API.
+            #[doc(hidden)]
+            pub const fn __air_tight_lookup(
+                category: &str,
+                action: &str,
+            ) -> ::core::option::Option<Self> {
+                #(
+                    if ::air_tight::const_str_eq(category, #variant_names) {
+                        return match <#tys>::__air_tight_variant(action) {
+                            ::core::option::Option::Some(a) => ::core::option::Option::Some(Self::#idents(a)),
+                            ::core::option::Option::None => ::core::option::Option::None,
+                        };
+                    }
+                )*
+                ::core::option::Option::None
             }
         }
 
