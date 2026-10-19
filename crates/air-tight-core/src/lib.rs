@@ -1,6 +1,14 @@
 //! Core traits, types and the condition tree for air-tight.
 //!
-//! This crate has no dependency on axum, diesel or moka.
+//! This crate has no dependency on axum, diesel or moka. It holds the traits
+//! the derives implement ([`Permission`], [`PermissionCategory`],
+//! [`ResourceKind`], [`IdentifyResources`], [`Principal`]), the key and scope
+//! newtypes ([`PermissionKey`], [`ResourceKindKey`], [`ResourceScope`]) and the
+//! [`Condition`] tree with wildcard matching.
+//!
+//! You normally do not depend on this crate directly: use the `air_tight`
+//! crate, which re-exports everything here together with the runtime and the
+//! macros. See its crate documentation for the walkthrough.
 #![deny(missing_docs)]
 
 mod condition;

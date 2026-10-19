@@ -4,6 +4,9 @@ description = "Procedural macros for air-tight"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+readme = "README.md"
+keywords = ["authorization","permissions","macros","axum","air-tight"]
+categories = ["authentication", "web-programming"]
 
 [lib]
 proc-macro = true

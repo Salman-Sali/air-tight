@@ -1,5 +1,10 @@
 //! Procedural macros for air-tight.
 //!
+//! This crate contains the derives (`Permission`, `PermissionCategory`,
+//! `ResourceKind`, `IdentifyResources`) and the attributes (`permission`,
+//! `unrestricted`). The walkthrough lives in the documentation of the
+//! `air_tight` crate.
+//!
 //! Use these through the `air_tight` crate, which re-exports them. Generated
 //! code refers to `::air_tight::...`, so the `air-tight` crate must be a
 //! dependency of the crate using the macros.

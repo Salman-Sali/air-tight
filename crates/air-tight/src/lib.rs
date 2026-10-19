@@ -1,4 +1,4 @@
-//! Runtime crate for air-tight. Re-exports the core types and the macros.
+#![doc = include_str!("../docs/guide.md")]
 #![deny(missing_docs)]
 
 #[doc(hidden)]
